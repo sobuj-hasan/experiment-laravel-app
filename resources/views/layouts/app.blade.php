@@ -10,6 +10,7 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css" />
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -32,5 +33,14 @@
                 {{ $slot }}
             </main>
         </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+        <script>
+            Notify::info('message', 'title', ['options']);
+            Notify::success('message', 'title', ['options']);
+            Notify::warning('message', 'title', ['options']);
+            Notify::error('message', 'title', ['options']);
+            {!! Notify::message() !!}
+        </script>
     </body>
 </html>
