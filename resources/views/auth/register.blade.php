@@ -2,6 +2,8 @@
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
+        <div id="error-message" style="color: red;"></div>
+
         <!-- Name -->
         <div>
             <x-input-label for="name" :value="__('Name')" />
@@ -11,9 +13,10 @@
 
         <!-- Email Address -->
         <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <x-input-label for="phone" :value="__('Phone')" />
+                <input id="phone" class="block mt-1 w-full" type="number" name="phone" value="" required autocomplete="username" />
+                <button type="button" id="button" class="btn btn-info" title="Edit" data-item=""> Send </button>
+            <x-input-error :messages="$errors->get('phone')" class="mt-2" />
         </div>
 
         <!-- Password -->
@@ -49,4 +52,44 @@
             </x-primary-button>
         </div>
     </form>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" ></script>
+    <script>
+        $(document).ready(function() {
+            // Get references to the input field and the button
+            const inputField = document.getElementById("phone");
+            const button = document.getElementById("button");
+
+            // Add an event listener to the input field to listen for input changes
+            inputField.addEventListener("input", function() {
+                // Get the current value of the input field
+                const inputValue = inputField.value;
+                // Update the data-item attribute of the button with the input value
+                button.setAttribute("data-item", inputValue);
+            });
+
+            // Add a click event handler for the "Send" button
+            $('#button').click(function() {
+                // Get the data-item attribute value from the button
+                var dataItemValue = $(this).attr('data-item');
+                
+                $.ajax({
+                    url: "/phone/verify", // Replace with your controller endpoint
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        phone: dataItemValue
+                    },
+                    success: function(response) {
+                        // Handle the response from the server
+                        // console.log(response);
+                        $('#error-message').text(response);
+                    },
+                    error: function(error) {
+                        // Handle any errors that occur during the AJAX request
+                        console.error(error);
+                    }
+                });
+            });
+        });
+    </script>
 </x-guest-layout>
